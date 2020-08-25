@@ -2,9 +2,9 @@
 
     return [
 
-        'table' => 'visitor_registry',
+        'table' => 'log_visitors',
 
-        'model' => \ThemisMin\LaravelVisitor\Models\VisitorRegistry::class,
+        'model' => \ThemisMin\LaravelVisitor\Models\LogVisitor::class,
 
         'ignored' => [
             '192.168.10.0/24',

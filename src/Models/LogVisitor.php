@@ -5,10 +5,10 @@ namespace ThemisMin\LaravelVisitor\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VisitorRegistry extends Model
+class LogVisitor extends Model
 {
 
-    protected $table = 'visitor_registry';
+    protected $table = 'log_visitors';
 
     protected $fillable = ['clicks'];
 
