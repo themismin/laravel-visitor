@@ -1,15 +1,14 @@
 <?php
 
-
 namespace ThemisMin\LaravelVisitor\Traits;
 
 
-trait MorphMany
+trait HasLogVisitors
 {
     /**
      * @return mixed
      */
-    public function hittable()
+    public function logVisitors()
     {
         return $this->morphMany(config('visitor.model'), 'hittable');
     }
