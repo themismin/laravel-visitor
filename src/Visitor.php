@@ -97,7 +97,7 @@ class Visitor implements Countable
         }
     }
 
-    public function log($users_id = null, $hit_id = null, $hit_type = null)
+    public function log($user_id = null, $hit_id = null, $hit_type = null)
     {
         $ip = $this->ip->get();
 
@@ -106,11 +106,11 @@ class Visitor implements Countable
         }
 
         //如果ip且$post_id对应ip存在，则该条数据的clicks+1
-        if ($this->has($ip) && $this->hasHit($users_id, $hit_id, $hit_type, $ip)) {
+        if ($this->has($ip) && $this->hasHit($user_id, $hit_id, $hit_type, $ip)) {
             //ip already exist in db.
             //$this->storage->increment( $ip );
             $visitor = $this->visitorRegistry->where('ip', $ip)
-                ->where('users_id', $users_id)
+                ->where('user_id', $user_id)
                 ->where('hittable_type', $hit_type)
                 ->where('hittable_id', $hit_id)->first();
 
@@ -131,7 +131,7 @@ class Visitor implements Countable
                 'clicks' => 1,
                 'updated_at' => c::now(),
                 'created_at' => c::now(),
-                'users_id' => $users_id,
+                'user_id' => $user_id,
                 'hittable_id' => $hit_id,
                 'hittable_type' => $hit_type
             ];
@@ -142,10 +142,10 @@ class Visitor implements Countable
         $this->cache->destroy('weboap.visitor');
     }
 
-    public function hasHit($users_id, $hit_id, $hit_type, $ip)
+    public function hasHit($user_id, $hit_id, $hit_type, $ip)
     {
         return $this->visitorRegistry->where('ip', $ip)
-            ->where('users_id', $users_id)
+            ->where('user_id', $user_id)
             ->where('hittable_type', $hit_type)
             ->where('hittable_id', $hit_id)->count() ? true : false;
     }

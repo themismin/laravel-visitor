@@ -16,12 +16,12 @@
                 $table->increments('id');
                 $table->string('ip', 32);
                 $table->string('country', 4)->nullable();
-                
+
                 $table->string('city', 20)->nullable();//新增
 
                 $table->integer('clicks')->unsigned()->default(0);
 
-                $table->integer('users_id')->nullable();//新增
+                $table->integer('user_id')->nullable();//新增
                 $table->integer('hittable_id')->nullable();//新增
                 $table->string('hittable_type')->nullable();//新增
                 $table->timestamps();
