@@ -97,8 +97,14 @@ class Visitor implements Countable
         }
     }
 
-    public function log($user_id = null, $hit_id = null, $hit_type = null)
+    /**
+     * @param null $hit_type
+     * @param null $hit_id
+     * @return bool|void
+     */
+    public function log($hit_type = null, $hit_id = null)
     {
+        $user_id = auth()->id();
         $ip = $this->ip->get();
 
         if (!$this->ip->isValid($ip)) {
