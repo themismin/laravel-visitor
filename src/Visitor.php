@@ -119,6 +119,7 @@ class Visitor implements Countable
         $page = Paginator::resolveCurrentPage();
 
         $hit_type = MiniProgramPath::getModelNameByPath($path);
+        $hit_id = null;
         if ($hit_type) {
             $hit_id = isset($options['id']) ? $options['id'] : null;
         }
