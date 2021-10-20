@@ -2,9 +2,11 @@
 
 namespace ThemisMin\LaravelVisitor;
 
+use App\Paths\MiniProgramPath;
 use Carbon\Carbon as c;
 use Countable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use ThemisMin\LaravelVisitor\Services\Cache\CacheInterface;
 use ThemisMin\LaravelVisitor\Services\Geo\GeoInterface;
@@ -98,54 +100,60 @@ class Visitor implements Countable
     }
 
     /**
-     * @param null $hit_type
-     * @param null $hit_id
-     * @return bool|void
+     * @param $page
+     * @param $options
+     * @param $scene
+     * @param $fuid
      */
-    public function log($hit_type = null, $hit_id = null)
+    public function log($path, $options, $scene, $fuid)
     {
-        $user_id = auth()->id();
         $ip = $this->ip->get();
-
         if (!$this->ip->isValid($ip)) {
             return;
         }
+        $geo = $this->geo->locate($ip);
+        $country = array_key_exists('country_code', $geo) ? $geo['country_code'] : null;
+        $city = array_key_exists('city', $geo) ? $geo['city'] : null;
 
-        //如果ip且$post_id对应ip存在，则该条数据的clicks+1
-        if ($this->has($ip) && $this->hasHit($user_id, $hit_id, $hit_type, $ip)) {
-            //ip already exist in db.
-            //$this->storage->increment( $ip );
-            $visitor = $this->visitorRegistry->where('ip', $ip)
-                ->where('user_id', $user_id)
-                ->where('hittable_type', $hit_type)
-                ->where('hittable_id', $hit_id)->first();
+        $user_id = auth()->id();
+        $page = Paginator::resolveCurrentPage();
 
-            $visitor->update(['clicks' => $visitor->clicks + 1]);
-
-            return true;
-        } else {
-            $geo = $this->geo->locate($ip);
-
-            $country = array_key_exists('country_code', $geo) ? $geo['country_code'] : null;
-            $city = array_key_exists('city', $geo) ? $geo['city'] : null;
-
-            //ip doesnt exist  in db
-            $data = [
-                'ip' => $ip,
-                'country' => $country,
-                'city' => $city,
-                'clicks' => 1,
-                'updated_at' => c::now(),
-                'created_at' => c::now(),
-                'user_id' => $user_id,
-                'hittable_id' => $hit_id,
-                'hittable_type' => $hit_type
-            ];
-            $this->storage->create($data);
+        $hit_type = MiniProgramPath::getModelNameByPath($path);
+        if ($hit_type) {
+            $hit_id = isset($options['id']) ? $options['id'] : null;
         }
 
-        // Clear the database cache
-        $this->cache->destroy('weboap.visitor');
+        // ip doesnt exist  in db
+        $data = [
+            'ip' => $ip,
+            'country' => $country,
+            'city' => $city,
+
+            'user_id' => $user_id,
+
+            'scene' => $scene,
+            'fuid' => $fuid,
+
+            'path' => $path,
+            'options' => $options,
+            'page' => $page,
+
+            'hittable_type' => $hit_type,
+            'hittable_id' => $hit_id,
+
+            'updated_at' => c::now(),
+            'created_at' => c::now(),
+        ];
+
+        $model = config('visitor.model');
+        (new $model)->create($data);
+
+        //
+        // $this->storage->create($data);
+        //
+        // // Clear the database cache
+        // $this->cache->destroy('weboap.visitor');
+
     }
 
     public function hasHit($user_id, $hit_id, $hit_type, $ip)
