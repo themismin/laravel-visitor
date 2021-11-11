@@ -1,37 +1,39 @@
 {
-  "name": "themismin/laravel-visitor",
-  "keywords": [
-    "api",
-    "json",
-    "response",
-    "laravel"
-  ],
-  "description": "Laravel api interface extension package",
-  "type": "library",
-  "require": {
-    "php": ">=5.6.4"
-  },
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "themismin",
-      "email": "themismin@gmail.com"
+    "name": "themismin/laravel-visitor",
+    "keywords": [
+        "api",
+        "json",
+        "response",
+        "laravel"
+    ],
+    "description": "Laravel api interface extension package",
+    "type": "library",
+    "require": {
+        "php": ">=5.6.4",
+        "jalle19/php-whitelist-check": "^1.0",
+        "geoip2/geoip2": "^2.10"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "themismin",
+            "email": "themismin@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "ThemisMin\\LaravelVisitor\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ThemisMin\\LaravelVisitor\\VisitorServiceProvider"
+            ],
+            "aliases": {
+                "Visitor": "ThemisMin\\LaravelVisitor\\Facades\\VisitorFacade"
+            }
+        }
     }
-  ],
-  "minimum-stability": "stable",
-  "autoload": {
-    "psr-4": {
-      "ThemisMin\\LaravelVisitor\\": "src/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "ThemisMin\\LaravelVisitor\\VisitorServiceProvider"
-      ],
-      "aliases": {
-        "Visitor": "ThemisMin\\LaravelVisitor\\Facades\\VisitorFacade"
-      }
-    }
-  }
 }
