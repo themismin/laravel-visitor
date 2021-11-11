@@ -100,7 +100,7 @@ class Visitor implements Countable
     }
 
     /**
-     * @param $page
+     * @param $path
      * @param $options
      * @param $scene
      * @param $fuid
@@ -147,7 +147,7 @@ class Visitor implements Countable
         ];
 
         $model = config('visitor.model');
-        (new $model)->create($data);
+        return (new $model)->create($data);
 
         //
         // $this->storage->create($data);
