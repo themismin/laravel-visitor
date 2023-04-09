@@ -104,8 +104,9 @@ class Visitor implements Countable
      * @param $options
      * @param $scene
      * @param $fuid
+     * @param $fbcid
      */
-    public function log($path, $options, $scene, $fuid)
+    public function log($path, $options, $scene, $fuid, $fbcid)
     {
         $ip = $this->ip->get();
         if (!$this->ip->isValid($ip)) {
@@ -134,6 +135,7 @@ class Visitor implements Countable
 
             'scene' => $scene,
             'fuid' => $fuid,
+            'fbcid' => $fbcid,
 
             'path' => $path,
             'options' => $options,
